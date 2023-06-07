@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, Link, useEffect } from "react";
 import { Octokit } from "https://cdn.skypack.dev/@octokit/rest";
 import "./Home.css";
 import "./App.css";
+import Repo from "./Repo.js";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
-  console.log(ACCESS_TOKEN);
   const [org, setOrg] = useState("Netflix");
   const [click, setClick] = useState(false);
+  //   const [commits, setCommits] = useState([]);
+  //   const [repo_name, setRepo_name] = useState("");
 
   const [repos, setRepos] = useState([]);
 
@@ -17,6 +20,12 @@ function Home() {
     getRepos(org);
     setClick(true);
   };
+
+  //   const handleClick = (e) => {
+  //     e.preventDefault();
+  //     setRepo_name(e.target.value);
+  //   };
+  //   console.log("repo_name:", repo_name);
 
   const getRepos = async (org) => {
     const data = [];
@@ -37,6 +46,7 @@ function Home() {
         results["stars_count"] = repositories[i]["stargazers_count"];
         results["forks_count"] = repositories[i]["forks_count"];
         results["created_at"] = repositories[i]["created_at"];
+        results["commits_url"] = repositories[i]["commits_url"];
         data.push(results);
       }
       setRepos(data);
@@ -81,9 +91,7 @@ function Home() {
               return (
                 <ul key={index} className="card" style={{ width: "18rem" }}>
                   <li>
-                    <a href="/" className="btn btn-primary">
-                      <h2>Name:</h2>
-                    </a>
+                    <h2>Name:</h2>
                     {repo.name}
                   </li>
                   <li>
@@ -100,6 +108,17 @@ function Home() {
                   </li>
                   <li>
                     <h2>Created At:</h2> {repo.created_at}
+                  </li>
+                  <li>
+                    {/* <a
+                      href={repo.name}
+                      className="stretched-link"
+                      onClick={<Repo repo_name={repo.name} />}
+                    >/</a> */}
+                    {/* <Link
+                      to={repo.name}
+                      onClick={<Repo repo_name={repo.name} />}
+                    ></Link> */}
                   </li>
                 </ul>
               );
